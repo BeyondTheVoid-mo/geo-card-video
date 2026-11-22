@@ -13,15 +13,3 @@ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-第三方说明
-
-本许可证只覆盖本仓库中由广州助成技术独服务有限公司提供的程序、文档和随附示例文稿。
-它允许包括商用在内的使用，但不授予以下材料的权利：
-
-- 字体。仓库不附带字体文件。
-- 合成声音，以及 edge-tts 访问的微软在线语音服务。
-- Chrome、Chromium、ffmpeg、puppeteer-core 及其依赖。
-- 使用者放进 input/ 的文案，以及文案权利人没有另行授权的内容。
-
-这些材料仍适用它们各自的许可证或服务条款。本仓库不能代为授予自己不拥有的权利。
