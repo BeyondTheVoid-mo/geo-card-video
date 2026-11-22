@@ -4,7 +4,7 @@ from pathlib import Path
 import edge_tts
 import numpy as np
 
-OUT = Path("/workspace/geo-card-video/audio")
+OUT = Path(__file__).resolve().parent
 SAMPLE = "以前你搜一个问题，屏幕上会排出十条蓝链接。现在，生成式搜索直接合成一段答案。十条变成一条。你不在答案里，就等于不存在。"
 
 VOICES = [

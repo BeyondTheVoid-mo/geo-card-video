@@ -3,6 +3,7 @@ import { spawn } from "child_process";
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { resolveChrome } from "./lib/chrome.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const HTML = path.join(__dirname, "index.html");
@@ -16,7 +17,7 @@ const PREVIEWS = (process.argv[3] === "preview");
 const PREVIEW_TIMES = [0, 2.2, 7.0, 9.5, 10.9, 16.5, 28.5, 40.5, 48, 51.5, 56.5, 58.5, 61.2];
 
 const browser = await puppeteer.launch({
-  executablePath: "/usr/bin/google-chrome",
+  executablePath: resolveChrome(),
   headless: "new",
   args: [
     "--no-sandbox",

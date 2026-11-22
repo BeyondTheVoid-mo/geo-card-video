@@ -1,11 +1,11 @@
 # GEO 配音版时间轴
 
-- 成片：/workspace/geo-card-video/geo-60s-vo.mp4
+- 成片：geo-60s-vo.mp4（运行 `node render-vo.mjs` 后写在仓库根目录，不纳入版本库）
 - 时长：102.634 秒（旁白自然语速，略长于 90 秒上限，未加速）
 - 分辨率：1080×1920，30fps，H.264 yuv420p + AAC 48kHz mono
 - 配音：edge-tts zh-CN-YunxiNeural，rate=-8%，pitch=-3Hz
 - 响度：约 -13.9 LUFS，真峰值约 -0.9 dBTP（未削波）
-- 未做音色克隆；基频中位数约 163Hz，接近参考的 160Hz 量级
+- 未做音色克隆。这条旁白的基频中位数约 163Hz。
 
 ## 旁白稿（分章）
 

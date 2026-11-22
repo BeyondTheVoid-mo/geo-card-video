@@ -4,7 +4,7 @@ import asyncio, json, os, subprocess, struct, wave
 from pathlib import Path
 import edge_tts
 
-OUT = Path("/workspace/geo-card-video/audio")
+OUT = Path(__file__).resolve().parent
 VOICE = "zh-CN-YunxiNeural"
 RATE = "-8%"
 PITCH = "-3Hz"
@@ -129,12 +129,12 @@ async def main():
 
     # concat
     concat_list = OUT / "concat.txt"
-    concat_list.write_text("".join(f"file '{p}'\n" for p in parts), encoding="utf-8")
+    concat_list.write_text("".join(f"file '{p.name}'\n" for p in parts), encoding="utf-8")
     raw = OUT / "voiceover_raw.wav"
     subprocess.check_call([
-        "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
-        "-c", "copy", str(raw)
-    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list.name,
+        "-c", "copy", raw.name
+    ], cwd=OUT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # two-pass loudnorm to -13 LUFS, TP -1.5
     probe = subprocess.check_output([

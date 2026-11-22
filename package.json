@@ -1,15 +1,19 @@
 {
   "name": "geo-card-video",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "极简动画风格，短视频生成",
+  "main": "generate.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate": "node generate.mjs",
+    "test": "node --test"
   },
   "keywords": [],
-  "author": "",
+  "author": "广州助成技术独服务有限公司",
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "puppeteer-core": "^25.18.1"
   }

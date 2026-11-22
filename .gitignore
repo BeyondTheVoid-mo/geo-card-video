@@ -9,8 +9,14 @@ vo-qc/
 ref/
 style-ref.png
 *.mp4
-audio/sample_*
+audio/sample_*.mp3
+audio/sample_*.wav
 audio/sec_*
 audio/sil_*
 audio/voiceover_raw.wav
 audio/voiceover.mp3
+output/*
+!output/.gitkeep
+input/_*
+__pycache__/
+*.pyc
