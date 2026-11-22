@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920, initial-scale=1" />
+<title>GEO 六十秒</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: #f3f4f1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  #stage {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    background-color: #f3f4f1;
+    background-image:
+      linear-gradient(to right, rgba(70, 76, 68, 0.072) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(70, 76, 68, 0.072) 1px, transparent 1px);
+    background-size: 45px 45px;
+    background-position: 0 0;
+    color: #1b1c19;
+  }
+  .vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(243,244,241,0) 52%, rgba(226,228,223,0.32) 100%);
+    z-index: 1;
+  }
+  .dots {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .dots span {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(90, 96, 88, 0.18);
+  }
+  nav#chapters {
+    position: absolute;
+    top: 86px;
+    left: 64px;
+    right: 64px;
+    height: 56px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    z-index: 5;
+    opacity: 0;
+  }
+  nav#chapters .item {
+    position: relative;
+    font-family: "Noto Sans CJK SC", "Noto Sans", sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    color: #9aa098;
+    padding: 0 0 10px 0;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  #nav-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 44px;
+    background: #1c1d1a;
+    border-radius: 1px;
+    pointer-events: none;
+  }
+  #chapter-label {
+    position: absolute;
+    top: 172px;
+    left: 68px;
+    right: 68px;
+    z-index: 5;
+    font-family: "Noto Sans CJK SC", "Noto Sans", sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: 0.02em;
+    color: #1c1d1a;
+    opacity: 0;
+    line-height: 1.3;
+  }
+  #card-stage {
+    position: absolute;
+    top: 268px;
+    left: 0;
+    width: 1080px;
+    height: 640px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #card {
+    width: 800px;
+    background: #fbfbfa;
+    border-radius: 22px;
+    box-shadow:
+      0 22px 48px rgba(40, 44, 36, 0.10),
+      0 6px 16px rgba(40, 44, 36, 0.05),
+      0 1px 0 rgba(255,255,255,0.8) inset;
+    border: 1px solid rgba(255,255,255,0.9);
+    padding: 56px 62px 52px 62px;
+    transform-origin: 50% 55%;
+    opacity: 0;
+    box-sizing: border-box;
+  }
+  #card .en {
+    font-family: "Noto Sans", "Noto Sans CJK SC", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 0.36em;
+    color: #6b6e68;
+    text-transform: uppercase;
+    margin: 0 0 22px 2px;
+    opacity: 0;
+    line-height: 1.2;
+  }
+  #card .zh {
+    font-family: "Noto Serif CJK SC", "Noto Serif", serif;
+    font-weight: 700;
+    font-size: 96px;
+    letter-spacing: 0.05em;
+    color: #161714;
+    line-height: 1.08;
+    margin: 0 0 24px 0;
+    opacity: 0;
+  }
+  #card .sub {
+    font-family: "Noto Sans CJK SC", "Noto Sans", sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: 0.02em;
+    color: #3a3c38;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0;
+  }
+  #source {
+    position: absolute;
+    top: 1088px;
+    left: 80px;
+    right: 80px;
+    z-index: 5;
+    font-family: "Noto Sans CJK SC", "Noto Sans", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #8b8e87;
+    letter-spacing: 0.02em;
+    line-height: 1.55;
+    opacity: 0;
+  }
+  #punch {
+    position: absolute;
+    top: 1276px;
+    left: 72px;
+    right: 72px;
+    z-index: 7;
+    font-family: "Noto Sans CJK SC", "Noto Sans", sans-serif;
+    font-weight: 700;
+    font-size: 46px;
+    color: #161714;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+    text-align: left;
+    opacity: 1;
+  }
+  #punch .pline {
+    display: block;
+    opacity: 0;
+  }
+  #end-credit {
+    position: absolute;
+    bottom: 72px;
+    left: 80px;
+    right: 80px;
+    z-index: 5;
+    font-family: "Noto Sans CJK SC", "Noto Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #a0a39c;
+    letter-spacing: 0.04em;
+    opacity: 0;
+  }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <div class="vignette"></div>
+    <div class="dots" id="dots"></div>
+    <nav id="chapters">
+      <span class="item" data-i="0">开头</span>
+      <span class="item" data-i="1">旧招</span>
+      <span class="item" data-i="2">新方法</span>
+      <span class="item" data-i="3">谁受益</span>
+      <span class="item" data-i="4">对症</span>
+      <span class="item" data-i="5">结尾</span>
+      <div id="nav-underline"></div>
+    </nav>
+    <div id="chapter-label"></div>
+    <div id="card-stage">
+      <div id="card">
+        <div class="en" id="card-en"></div>
+        <div class="zh" id="card-zh"></div>
+        <div class="sub" id="card-sub"></div>
+      </div>
+    </div>
+    <div id="source"></div>
+    <div id="punch"></div>
+    <div id="end-credit">依据公开论文概括，非原文摘录</div>
+  </div>
+<script>
+const DURATION = 62.0;
+const SCENES = [
+  {
+    id: 0,
+    start: 0.0,
+    end: 10.0,
+    label: "开头 · 十条蓝链接为什么不够用了",
+    en: "TEN BLUE LINKS",
+    zh: "十条变一条",
+    sub: "生成式搜索不再给列表，只给答案",
+    source: "来源：Aggarwal 等，《GEO: Generative Engine Optimization》，KDD 2024",
+    punch: ["你不在答案里，就等于不存在"]
+  },
+  {
+    id: 1,
+    start: 10.0,
+    end: 21.0,
+    label: "01 · 关键词堆砌为什么不好使",
+    en: "KEYWORD STUFFING",
+    zh: "旧招失效",
+    sub: "搜索优化里最熟的方法，在生成式引擎里几乎不加分",
+    source: "来源：普林斯顿与德里理工等提出 GEO（生成式引擎优化）；GEO-bench 约一万条问题对照实验",
+    punch: ["把语气写得更权威，也没有明显加分"]
+  },
+  {
+    id: 2,
+    start: 21.0,
+    end: 33.0,
+    label: "02 · 真正被写进答案的是什么",
+    en: "CITE  ·  QUOTE  ·  STAT",
+    zh: "三件实事",
+    sub: "出处、引语、数字，可见度最多提高约四成",
+    source: "来源：核心指标 Position-Adjusted Word Count，相对提升约 30%–40%",
+    punch: ["改动不大，被写进答案的机会却明显增加"]
+  },
+  {
+    id: 3,
+    start: 33.0,
+    end: 45.0,
+    label: "03 · 好排名为什么保不了你",
+    en: "RANK-FIVE VISIBILITY",
+    zh: "后来居上",
+    sub: "排第五的来源补上出处，可见度相对提高 115%",
+    source: "来源：论文表 2，Cite Sources 方法；同期第一名为 -30.3%",
+    punch: ["第一名再堆同样的招，", "可见度甚至可能下降"]
+  },
+  {
+    id: 4,
+    start: 45.0,
+    end: 54.0,
+    label: "04 · 同一套方法为什么不够用",
+    en: "DOMAIN MATTERS",
+    zh: "按行下药",
+    sub: "法律政务更吃数据，事实题更吃出处<br>人物历史更吃引语",
+    source: "来源：论文表 3，不同领域的最优方法并不相同",
+    punch: ["一套模板用到底，会用错力气"]
+  },
+  {
+    id: 5,
+    start: 54.0,
+    end: 62.0,
+    label: "结尾 · 一笔账",
+    en: "FROM LIST TO ANSWER",
+    zh: "写进答案",
+    sub: "把能被引用的内容写清楚<br>比把关键词堆满更值钱",
+    source: "来源：观点概括自 Aggarwal 等 2024 年 KDD 论文，arxiv.org/abs/2311.09735",
+    punch: ["搜索从给列表，变成给答案"],
+    sourceDelay: 1.55,
+    punchDelay: 2.55
+  }
+];
+
+function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+function easeOutCubic(x) { return 1 - Math.pow(1 - x, 3); }
+function easeInOutCubic(x) {
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+}
+function easeOutQuart(x) { return 1 - Math.pow(1 - x, 4); }
+function ramp(t, t0, t1, easing = easeOutCubic) {
+  if (t1 <= t0) return t >= t1 ? 1 : 0;
+  return easing(clamp((t - t0) / (t1 - t0), 0, 1));
+}
+
+const els = {
+  nav: document.getElementById("chapters"),
+  items: [...document.querySelectorAll("#chapters .item")],
+  underline: document.getElementById("nav-underline"),
+  label: document.getElementById("chapter-label"),
+  card: document.getElementById("card"),
+  en: document.getElementById("card-en"),
+  zh: document.getElementById("card-zh"),
+  sub: document.getElementById("card-sub"),
+  source: document.getElementById("source"),
+  punch: document.getElementById("punch"),
+  credit: document.getElementById("end-credit"),
+};
+
+function placeDots() {
+  const root = document.getElementById("dots");
+  const clusters = [
+    { x: 980, y: 250, pattern: "quincunx", s: 22 },
+    { x: 70, y: 860, pattern: "quincunx", s: 20 },
+    { x: 990, y: 1020, pattern: "plus", s: 24 },
+    { x: 86, y: 1640, pattern: "three", s: 18 },
+    { x: 940, y: 1700, pattern: "quincunx", s: 18 }
+  ];
+  clusters.forEach((c) => {
+    let pts;
+    if (c.pattern === "three") {
+      pts = [[0,0],[-c.s, c.s * 0.7],[c.s, c.s * 0.7]];
+    } else {
+      pts = [[0,0],[0,-c.s],[0,c.s],[-c.s,0],[c.s,0]];
+    }
+    pts.forEach(([dx, dy], j) => {
+      const s = document.createElement("span");
+      s.style.left = (c.x + dx) + "px";
+      s.style.top = (c.y + dy) + "px";
+      s.style.opacity = (0.55 + (j % 3) * 0.12).toString();
+      root.appendChild(s);
+    });
+  });
+}
+placeDots();
+
+let currentSceneId = -1;
+function fillScene(scene) {
+  if (!scene) return;
+  if (currentSceneId === scene.id) return;
+  currentSceneId = scene.id;
+  els.label.textContent = scene.label;
+  els.en.textContent = scene.en;
+  els.zh.textContent = scene.zh;
+  els.sub.innerHTML = scene.sub;
+  els.source.textContent = scene.source;
+  els.punch.innerHTML = scene.punch.map((line) => `<span class="pline">${line}</span>`).join("");
+}
+
+function navIndex(t) {
+  const scene = sceneAt(t);
+  if (scene.id === 0) return 0;
+  const p = ramp(t, scene.start, scene.start + 0.62, easeInOutCubic);
+  return (scene.id - 1) + p;
+}
+
+function underlineToFloat(x) {
+  const i0 = Math.floor(x);
+  const i1 = Math.min(els.items.length - 1, i0 + 1);
+  const f = x - i0;
+  const navRect = els.nav.getBoundingClientRect();
+  const r0 = els.items[i0].getBoundingClientRect();
+  const r1 = els.items[i1].getBoundingClientRect();
+  const w0 = Math.max(28, r0.width * 0.72);
+  const w1 = Math.max(28, r1.width * 0.72);
+  const l0 = r0.left - navRect.left + (r0.width - w0) / 2;
+  const l1 = r1.left - navRect.left + (r1.width - w1) / 2;
+  els.underline.style.width = (w0 + (w1 - w0) * f) + "px";
+  els.underline.style.left = (l0 + (l1 - l0) * f) + "px";
+
+  const c0 = [28, 29, 26];
+  const c1 = [154, 160, 152];
+  els.items.forEach((it, i) => {
+    const d = Math.min(1, Math.abs(i - x));
+    const r = Math.round(c0[0] + (c1[0] - c0[0]) * d);
+    const g = Math.round(c0[1] + (c1[1] - c0[1]) * d);
+    const b = Math.round(c0[2] + (c1[2] - c0[2]) * d);
+    it.style.color = `rgb(${r}, ${g}, ${b})`;
+    it.style.fontWeight = d < 0.45 ? "700" : "400";
+  });
+}
+
+function sceneAt(t) {
+  for (let i = SCENES.length - 1; i >= 0; i--) {
+    if (t + 0.0001 >= SCENES[i].start) return SCENES[i];
+  }
+  return SCENES[0];
+}
+
+function localInOut(t, scene) {
+  const start = scene.start;
+  const end = scene.end;
+  const dur = end - start;
+  const isFirst = scene.id === 0;
+  const isLast = scene.id === SCENES.length - 1;
+  const labelIn0 = isFirst ? 1.05 : 0.18;
+  const cardIn0 = isFirst ? 1.55 : 0.42;
+  const srcIn0 = scene.sourceDelay != null ? scene.sourceDelay : (isFirst ? 3.15 : 1.85);
+  const defaultPunch = Math.min(5.35, Math.max(3.6, dur - 4.6));
+  const punchIn0 = scene.punchDelay != null ? scene.punchDelay : (isFirst ? 5.70 : defaultPunch);
+  const fadeOutStart = isLast ? end - 1.05 : end - 0.95;
+  const lt = t - start;
+
+  const labelIn = ramp(t, start + labelIn0, start + labelIn0 + 0.70);
+  const enIn = ramp(t, start + cardIn0, start + cardIn0 + 0.62);
+  const zhIn = ramp(t, start + cardIn0 + 0.28, start + cardIn0 + 0.98);
+  const subIn = ramp(t, start + cardIn0 + 0.56, start + cardIn0 + 1.26);
+  const cardShell = ramp(t, start + cardIn0 - 0.08, start + cardIn0 + 0.95, easeOutQuart);
+  const srcIn = ramp(t, start + srcIn0, start + srcIn0 + 0.70);
+  const punchIn = ramp(t, start + punchIn0, start + punchIn0 + 0.80);
+  const punchIn2 = ramp(t, start + punchIn0 + 0.18, start + punchIn0 + 0.98);
+
+  let fadeOut = 1;
+  if (t >= fadeOutStart) {
+    fadeOut = 1 - ramp(t, fadeOutStart, end, easeInOutCubic);
+  }
+  return { labelIn, enIn, zhIn, subIn, cardShell, srcIn, punchIn, punchIn2, fadeOut, lt, isFirst, isLast };
+}
+
+window.seek = function seek(t) {
+  t = clamp(t, 0, DURATION);
+  const scene = sceneAt(t);
+  fillScene(scene);
+  const a = localInOut(t, scene);
+
+  els.nav.style.opacity = (ramp(t, 0.4, 1.3) * (t > DURATION - 1.1 ? (1 - ramp(t, DURATION - 1.1, DURATION, easeInOutCubic)) : 1)).toString();
+  underlineToFloat(navIndex(t));
+
+  const labelOp = a.labelIn * a.fadeOut;
+  els.label.style.opacity = labelOp.toString();
+  els.label.style.transform = `translateY(${(1 - a.labelIn) * 10}px)`;
+
+  const breathY = Math.sin(t * 0.65) * 2.0;
+  const breathR = Math.sin(t * 0.5 + 0.3) * 0.18;
+  const baseRot = 5.2;
+  const enterY = (1 - a.cardShell) * 28;
+  const enterRot = (1 - a.cardShell) * 3.4;
+  const exitY = (1 - a.fadeOut) * -16;
+  const cardOp = a.cardShell * a.fadeOut;
+  els.card.style.opacity = cardOp.toString();
+  els.card.style.transform = `translateY(${enterY + exitY + breathY}px) rotate(${baseRot + enterRot + breathR}deg)`;
+
+  els.en.style.opacity = (a.enIn * a.fadeOut).toString();
+  els.en.style.transform = `translateY(${(1 - a.enIn) * 8}px)`;
+  els.zh.style.opacity = (a.zhIn * a.fadeOut).toString();
+  els.zh.style.transform = `translateY(${(1 - a.zhIn) * 14}px)`;
+  els.sub.style.opacity = (a.subIn * a.fadeOut).toString();
+  els.sub.style.transform = `translateY(${(1 - a.subIn) * 10}px)`;
+
+  els.source.style.opacity = (a.srcIn * a.fadeOut).toString();
+  els.source.style.transform = `translateY(${(1 - a.srcIn) * 8}px)`;
+
+  const lines = els.punch.querySelectorAll(".pline");
+  if (lines[0]) {
+    lines[0].style.opacity = (a.punchIn * a.fadeOut).toString();
+    lines[0].style.transform = `translateY(${(1 - a.punchIn) * 14}px)`;
+  }
+  if (lines[1]) {
+    lines[1].style.opacity = (a.punchIn2 * a.fadeOut).toString();
+    lines[1].style.transform = `translateY(${(1 - a.punchIn2) * 14}px)`;
+  }
+
+  const creditOn = a.isLast ? ramp(t, scene.start + 2.0, scene.start + 2.7) * a.fadeOut : 0;
+  els.credit.style.opacity = creditOn.toString();
+
+  return scene.id;
+};
+
+window.DURATION = DURATION;
+
+const params = new URLSearchParams(location.search);
+if (params.has("play")) {
+  const t0 = performance.now();
+  const start = parseFloat(params.get("t") || "0");
+  function loop(now) {
+    const t = start + (now - t0) / 1000;
+    if (t <= DURATION) {
+      seek(t);
+      requestAnimationFrame(loop);
+    } else {
+      seek(DURATION);
+    }
+  }
+  requestAnimationFrame(loop);
+} else if (params.has("t")) {
+  seek(parseFloat(params.get("t")));
+} else {
+  seek(0);
+}
+</script>
+</body>
+</html>

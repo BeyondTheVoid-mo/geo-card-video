@@ -1,0 +1,16 @@
+node_modules/
+venv/
+frames/
+vo-frames/
+previews/
+vo-previews/
+qc/
+vo-qc/
+ref/
+style-ref.png
+*.mp4
+audio/sample_*
+audio/sec_*
+audio/sil_*
+audio/voiceover_raw.wav
+audio/voiceover.mp3

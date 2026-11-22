@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920, initial-scale=1" />
+<title>GEO 六十秒 配音版</title>
+<style>
+:root{
+  --ink:#242422;
+  --ink-title:#262628;
+  --green:#2F503F;
+  --green-deep:#243F33;
+  --green-top:#3A6350;
+  --sage:#2E3D36;
+  --muted:#8F8F8D;
+  --source:#6B6B69;
+  --card:#FBFBF9;
+  --paper:#F5F5F3;
+  --gray-bar:#C5C5C1;
+  --track:#E6E6E2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:1080px;height:1920px;overflow:hidden;background:#F5F5F3;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+#stage{
+  position:relative;width:1080px;height:1920px;
+  background-color:#F5F5F3;
+  background-image:
+    linear-gradient(to right, rgba(36,36,34,0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(36,36,34,0.07) 1px, transparent 1px);
+  background-size:24px 24px;
+  background-position:0 0;
+  color:var(--ink);
+}
+.wash{
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:
+    radial-gradient(ellipse at 50% 38%, rgba(249,249,247,0) 28%, rgba(228,228,224,0.38) 100%),
+    linear-gradient(to bottom,
+      rgba(232,232,228,0.28) 0%,
+      rgba(255,255,255,0) 14%,
+      rgba(255,255,255,0) 58%,
+      rgba(210,212,207,0.62) 100%);
+}
+.decor{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}
+.blob{position:absolute;border-radius:50%;background:rgba(70,72,68,0.07);filter:blur(28px)}
+.pip{position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(80,82,78,0.15)}
+.pip.s{width:5px;height:5px;background:rgba(80,82,78,0.11)}
+#nav{position:absolute;top:252px;left:90px;width:900px;height:56px;z-index:8;opacity:0}
+#progress{position:absolute;left:0;top:0;height:5px;width:0;background:var(--green);border-radius:1px}
+.nav-items{
+  position:absolute;left:0;right:0;top:24px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+}
+.nav-items span{
+  font-family:"Noto Sans CJK SC","Noto Sans CJK",sans-serif;
+  font-weight:400;font-size:20px;line-height:1;letter-spacing:0.02em;
+  color:var(--muted);white-space:nowrap;
+}
+.nav-items span.on{color:#1A1A18}
+#chap-title{
+  position:absolute;top:327px;left:90px;right:90px;z-index:8;
+  font-family:"Noto Sans CJK SC","Noto Sans CJK",sans-serif;
+  font-weight:700;font-size:22px;line-height:1.15;letter-spacing:0.02em;
+  color:var(--sage);opacity:0;
+}
+#viz{position:absolute;top:390px;left:0;width:1080px;height:880px;z-index:6}
+.scene{position:absolute;inset:0;opacity:0}
+#source{
+  position:absolute;top:1300px;left:90px;right:70px;z-index:8;
+  font-family:"Noto Sans CJK SC",sans-serif;
+  font-weight:400;font-size:22px;line-height:30px;color:var(--source);
+  opacity:0;white-space:nowrap;
+}
+#caption-wrap{position:absolute;top:1410px;left:48px;right:48px;height:70px;z-index:9}
+.cap{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+  font-family:"Noto Sans CJK SC",sans-serif;
+  font-weight:700;font-size:50px;line-height:1.15;letter-spacing:0.01em;
+  color:var(--ink);opacity:0;
+}
+.huge{
+  font-family:"Noto Serif CJK SC","Noto Serif CJK",serif;
+  font-weight:700;color:var(--ink-title);letter-spacing:0.01em;
+  line-height:0.95;white-space:nowrap;
+}
+.huge .g{color:var(--green)}
+
+/* links */
+.link-row{position:absolute;left:120px;width:820px;display:flex;align-items:flex-start;gap:18px}
+.link-row .idx{
+  font-family:"Noto Sans CJK SC",sans-serif;font-size:20px;line-height:16px;
+  color:#9AA0A8;width:32px;flex:none;padding-top:0;
+}
+.link-row .bars{flex:1;min-width:0}
+.link-row .lt,.link-row .ls{border-radius:7px}
+.link-row .lt{height:16px;background:#B4B8C0}
+.link-row .ls{height:12px;margin-top:10px;background:#D8DCE2}
+#scene-links .answer{
+  position:absolute;left:190px;top:210px;width:700px;height:300px;
+  background:var(--card);border-radius:22px;
+  box-shadow:0 18px 40px rgba(40,44,36,0.10),0 4px 12px rgba(40,44,36,0.05);
+  padding:50px 54px;opacity:0;
+}
+#scene-links .answer .al{height:16px;border-radius:8px;background:#DCDCD8;margin-bottom:22px}
+#scene-links .big-title{position:absolute;left:0;right:0;top:250px;text-align:center;font-size:118px}
+#scene-links .eq{
+  position:absolute;left:0;right:0;top:430px;text-align:center;
+  font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:52px;color:var(--sage);
+}
+
+/* cite */
+#scene-cite .tag{
+  position:absolute;left:90px;top:80px;
+  font-family:"Noto Sans CJK SC",sans-serif;font-weight:700;
+  font-size:22px;color:var(--sage);
+  border:1.5px solid var(--sage);border-radius:8px;padding:8px 16px;letter-spacing:0.04em;
+}
+#scene-cite .lines{position:absolute;left:90px;right:90px;top:180px}
+#scene-cite .cl{height:2px;background:#8A8A86;margin:44px 0;transform-origin:left center;transform:scaleX(0)}
+
+/* geo */
+#scene-geo .geo{position:absolute;left:0;right:0;top:170px;text-align:center;font-size:220px;letter-spacing:0.06em}
+#scene-geo .sub{
+  position:absolute;left:0;right:0;top:450px;text-align:center;
+  font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:48px;color:var(--ink);
+}
+
+/* 10k */
+#scene-10k .dots{position:absolute;inset:40px 90px 80px}
+#scene-10k .d{position:absolute;border-radius:50%;background:#8E8E8A}
+#scene-10k .num{position:absolute;left:0;right:0;top:270px;text-align:center;font-size:140px}
+#scene-10k .unit{
+  position:absolute;left:0;right:0;top:460px;text-align:center;
+  font-family:"Noto Sans CJK SC",sans-serif;font-size:28px;color:#7A7A76;
+}
+
+/* zero */
+.pair{position:absolute;left:80px;right:80px;top:140px;height:520px;display:flex;gap:28px}
+.card{
+  flex:1;background:var(--card);border-radius:22px;position:relative;
+  box-shadow:0 16px 36px rgba(40,44,36,0.09),0 3px 10px rgba(40,44,36,0.04);
+  padding:40px 40px 36px;
+}
+.card .mark{font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:42px;color:var(--ink);line-height:1}
+.card .shi{position:absolute;top:36px;right:36px;font-family:"Noto Sans CJK SC",sans-serif;font-size:20px;color:#A0A09C}
+.card .name{font-family:"Noto Sans CJK SC",sans-serif;font-weight:700;font-size:32px;margin-top:16px;color:var(--ink)}
+.card .bar-track{margin-top:70px;height:28px;background:var(--track);border-radius:4px;overflow:hidden}
+.card .bar-fill{height:100%;width:0;background:var(--gray-bar);border-radius:4px}
+.card .zero{margin-top:32px;font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:64px;color:#9A9A96}
+
+/* three */
+#scene-three .lead{
+  position:absolute;left:90px;right:90px;top:40px;
+  font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:56px;color:var(--ink);
+}
+#scene-three .items{position:absolute;left:80px;right:80px;top:180px;display:flex;gap:24px}
+.meth{
+  flex:1;background:var(--card);border-radius:22px;text-align:center;padding:52px 14px 44px;
+  box-shadow:0 14px 32px rgba(40,44,36,0.08);opacity:0;
+}
+.meth .ico{
+  width:72px;height:72px;margin:0 auto 28px;border-radius:16px;background:var(--green);color:#F6F7F4;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:34px;
+}
+.meth .nm{font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:40px;color:var(--ink)}
+.meth .en{margin-top:12px;font-family:"Noto Sans CJK SC",sans-serif;font-size:18px;color:#8A8A86;letter-spacing:0.06em}
+
+/* 40 */
+#scene-40 .stat{position:absolute;left:60px;right:60px;top:140px;text-align:center;font-size:200px}
+#scene-40 .range{
+  position:absolute;left:0;right:0;top:420px;text-align:center;
+  font-family:"Noto Sans CJK SC",sans-serif;font-size:28px;color:#7A7A76;
+}
+#scene-40 .bars{position:absolute;left:200px;right:200px;top:520px;display:flex;gap:80px;align-items:flex-end;justify-content:center;height:230px}
+#scene-40 .vb{width:96px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+#scene-40 .vb .f{width:96px;background:var(--green);border-radius:3px 3px 0 0;height:0}
+#scene-40 .vb .n{margin-top:14px;font-family:"Noto Sans CJK SC",sans-serif;font-size:20px;color:#6E6E6A}
+
+/* who */
+#scene-who .cols{
+  position:absolute;left:90px;right:90px;top:30px;bottom:10px;
+  display:flex;gap:70px;align-items:flex-end;
+}
+.who-col{flex:1;display:flex;flex-direction:column;align-items:center;opacity:0}
+.who-col .num{font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:92px;line-height:1;margin-bottom:28px}
+.who-col .num.up{color:var(--green)}
+.who-col .num.down{color:#8A8A86}
+.bar3d{position:relative;width:150px}
+.bar3d .face{width:150px;background:var(--green);position:relative}
+.bar3d .side{position:absolute;right:-18px;bottom:0;width:18px;background:var(--green-deep);transform:skewY(-32deg);transform-origin:bottom left}
+.bar3d .lid{position:absolute;left:0;width:150px;height:16px;background:var(--green-top);transform:skewX(-48deg);transform-origin:left bottom}
+.bar3d.gray .face{background:#C8C8C4}
+.bar3d.gray .side{background:#A8A8A4}
+.bar3d.gray .lid{background:#D8D8D4}
+.who-col .tag{margin-top:22px;font-family:"Noto Sans CJK SC",sans-serif;font-size:26px;color:var(--ink)}
+.who-col .subtag{margin-top:8px;font-family:"Noto Sans CJK SC",sans-serif;font-size:20px;color:#8A8A86}
+
+/* trad */
+#scene-trad .block{position:absolute;left:90px;right:90px;top:140px}
+#scene-trad .row{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:38px 8px;border-bottom:1px solid rgba(40,40,38,0.12);opacity:0;
+}
+#scene-trad .k{font-family:"Noto Sans CJK SC",sans-serif;font-size:28px;color:#8A8A86}
+#scene-trad .v{font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:44px;color:var(--ink)}
+#scene-trad .row.hi .v{color:var(--green);font-size:52px}
+
+/* fit */
+#scene-fit .rows{position:absolute;left:90px;right:90px;top:70px}
+.fit-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:38px 8px;border-bottom:1px solid rgba(40,40,38,0.10);opacity:0;
+}
+.fit-row .left{font-family:"Noto Sans CJK SC",sans-serif;font-size:30px;color:#4A4A46}
+.fit-row .right{font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:48px;color:var(--green)}
+#scene-fit .warn{
+  position:absolute;left:90px;right:90px;top:560px;
+  font-family:"Noto Serif CJK SC",serif;font-weight:700;font-size:56px;color:var(--ink);opacity:0;
+}
+
+/* end */
+#scene-end .rule{position:absolute;left:90px;top:200px;width:72px;height:6px;background:var(--green);transform-origin:left;transform:scaleX(0)}
+#scene-end .title{position:absolute;left:90px;right:90px;top:240px;font-size:148px;text-align:left}
+#scene-end .foot{display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="wash"></div>
+  <div class="decor" id="decor"></div>
+
+  <nav id="nav">
+    <div id="progress"></div>
+    <div class="nav-items" id="nav-items">
+      <span data-i="0">开头</span>
+      <span data-i="1">旧招</span>
+      <span data-i="2">新方法</span>
+      <span data-i="3">谁受益</span>
+      <span data-i="4">对症</span>
+      <span data-i="5">结尾</span>
+    </div>
+  </nav>
+  <div id="chap-title"></div>
+
+  <div id="viz">
+    <section class="scene" id="scene-links">
+      <div id="link-rows"></div>
+      <div class="answer" id="answer-card">
+        <div class="al" style="width:88%"></div>
+        <div class="al" style="width:74%"></div>
+        <div class="al" style="width:80%"></div>
+        <div class="al" style="width:52%"></div>
+      </div>
+      <div class="huge big-title" id="ten-title"><span>十条变</span><span class="g">一条</span></div>
+      <div class="eq" id="eq-line">不在答案里，等于不存在</div>
+    </section>
+
+    <section class="scene" id="scene-cite">
+      <div class="tag">KDD 2024</div>
+      <div class="lines" id="cite-lines">
+        <div class="cl" style="width:100%"></div>
+        <div class="cl" style="width:92%"></div>
+        <div class="cl" style="width:86%"></div>
+        <div class="cl" style="width:70%"></div>
+        <div class="cl" style="width:48%"></div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene-geo">
+      <div class="huge geo"><span class="g">GEO</span></div>
+      <div class="sub">生成式引擎优化</div>
+    </section>
+
+    <section class="scene" id="scene-10k">
+      <div class="dots" id="dots-10k"></div>
+      <div class="huge num" id="num-10k"><span class="g">约 10,000</span></div>
+      <div class="unit">对照实验问题数</div>
+    </section>
+
+    <section class="scene" id="scene-zero">
+      <div class="pair">
+        <div class="card" id="card-kw">
+          <div class="mark">×</div>
+          <div class="shi">示意</div>
+          <div class="name">堆关键词</div>
+          <div class="bar-track"><div class="bar-fill" id="bar-kw"></div></div>
+          <div class="zero">≈ 0</div>
+        </div>
+        <div class="card" id="card-auth">
+          <div class="mark">×</div>
+          <div class="shi">示意</div>
+          <div class="name">装权威</div>
+          <div class="bar-track"><div class="bar-fill" id="bar-auth"></div></div>
+          <div class="zero">≈ 0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene-three">
+      <div class="lead" id="three-lead">三件实事</div>
+      <div class="items">
+        <div class="meth" id="meth-0"><div class="ico">引</div><div class="nm">出处</div><div class="en">Cite Sources</div></div>
+        <div class="meth" id="meth-1"><div class="ico">「」</div><div class="nm">引语</div><div class="en">Quotation</div></div>
+        <div class="meth" id="meth-2"><div class="ico">#</div><div class="nm">数字</div><div class="en">Statistics</div></div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene-40">
+      <div class="huge stat" id="stat-40"><span>约</span><span class="g">40%</span></div>
+      <div class="range">核心指标相对提升 30%–40%</div>
+      <div class="bars">
+        <div class="vb"><div class="f" id="b40-0"></div><div class="n">出处</div></div>
+        <div class="vb"><div class="f" id="b40-1"></div><div class="n">引语</div></div>
+        <div class="vb"><div class="f" id="b40-2"></div><div class="n">数字</div></div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene-who">
+      <div class="cols">
+        <div class="who-col" id="who-5">
+          <div class="num up" id="who-5-num">+115%</div>
+          <div class="bar3d" id="who-5-bar">
+            <div class="lid"></div>
+            <div class="face"></div>
+            <div class="side"></div>
+          </div>
+          <div class="tag">第 5 名</div>
+          <div class="subtag">Cite Sources 后</div>
+        </div>
+        <div class="who-col" id="who-1">
+          <div class="num down" id="who-1-num">−30%</div>
+          <div class="bar3d gray" id="who-1-bar">
+            <div class="lid"></div>
+            <div class="face"></div>
+            <div class="side"></div>
+          </div>
+          <div class="tag">第 1 名</div>
+          <div class="subtag">同一方法</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene-trad">
+      <div class="block">
+        <div class="row" id="trad-0"><div class="k">传统搜索看</div><div class="v">外链和域名</div></div>
+        <div class="row hi" id="trad-1"><div class="k">生成式引擎看</div><div class="v">写进答案</div></div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene-fit">
+      <div class="rows">
+        <div class="fit-row" id="fit-0"><div class="left">法律政务 · 观点题</div><div class="right">数据</div></div>
+        <div class="fit-row" id="fit-1"><div class="left">事实题</div><div class="right">出处</div></div>
+        <div class="fit-row" id="fit-2"><div class="left">人物与历史</div><div class="right">引语</div></div>
+      </div>
+      <div class="warn" id="fit-warn">一套模板，会用错力气</div>
+    </section>
+
+    <section class="scene" id="scene-end">
+      <div class="rule" id="end-rule"></div>
+      <div class="huge title" id="end-title">写进答案</div>
+      <div class="foot" id="end-foot">依据公开论文概括 · Aggarwal 等，KDD 2024</div>
+    </section>
+  </div>
+
+  <div id="source"></div>
+  <div id="caption-wrap">
+    <div class="cap" id="cap-a"></div>
+    <div class="cap" id="cap-b"></div>
+  </div>
+</div>
+<script>
+const DURATION = 102.634;
+const CHAPTERS = [
+  { label: "开头", title: "", t: 0.00 },
+  { label: "旧招", title: "01 · 旧招为什么失灵", t: 15.63 },
+  { label: "新方法", title: "02 · 真正有效的三件事", t: 35.84 },
+  { label: "谁受益", title: "03 · 谁更受益", t: 54.75 },
+  { label: "对症", title: "04 · 方法还得对症", t: 79.08 },
+  { label: "结尾", title: "结尾", t: 93.20 },
+];
+const SRC = {
+  paper: "来源：Aggarwal 等，GEO: Generative Engine Optimization，KDD 2024",
+  table: "来源：Aggarwal 等，GEO 表2，Cite Sources（+115.1% / −30.3%）",
+  domain: "来源：Aggarwal 等，GEO，KDD 2024，效果因领域而异",
+  end: "依据公开论文概括：Aggarwal 等，KDD 2024",
+};
+const CUES = [
+  { t0: 0.00,  t1: 0.66,  ch: 0, cap: "",                 src: "",          scene: "links" },
+  { t0: 0.66,  t1: 2.35,  ch: 0, cap: "以前你搜一个问题",     src: SRC.paper,   scene: "links" },
+  { t0: 2.35,  t1: 5.01,  ch: 0, cap: "会排出十条蓝链接",     src: SRC.paper,   scene: "links" },
+  { t0: 5.01,  t1: 9.62,  ch: 0, cap: "直接合成一段答案",     src: SRC.paper,   scene: "links" },
+  { t0: 9.62,  t1: 11.78, ch: 0, cap: "十条变成一条",         src: SRC.paper,   scene: "links" },
+  { t0: 11.78, t1: 15.63, ch: 0, cap: "就等于不存在",         src: SRC.paper,   scene: "links" },
+
+  { t0: 15.63, t1: 18.32, ch: 1, cap: "普林斯顿与德里理工等研究者", src: SRC.paper, scene: "cite" },
+  { t0: 18.32, t1: 23.13, ch: 1, cap: "叫做GEO，生成式引擎优化", src: SRC.paper, scene: "geo" },
+  { t0: 23.13, t1: 26.89, ch: 1, cap: "大约一万条问题",         src: SRC.paper, scene: "tenk" },
+  { t0: 26.89, t1: 31.21, ch: 1, cap: "关键词堆砌几乎不加分",   src: SRC.paper, scene: "zero" },
+  { t0: 31.21, t1: 35.84, ch: 1, cap: "权威语气也没有加分",     src: SRC.paper, scene: "zero" },
+
+  { t0: 35.84, t1: 38.39, ch: 2, cap: "真正有效的是三件实事",   src: SRC.paper, scene: "three" },
+  { t0: 38.39, t1: 43.40, ch: 2, cap: "出处、引语、数字",       src: SRC.paper, scene: "three" },
+  { t0: 43.40, t1: 46.73, ch: 2, cap: "可见度提升三到四成",     src: SRC.paper, scene: "forty" },
+  { t0: 46.73, t1: 49.37, ch: 2, cap: "最多约百分之四十",       src: SRC.paper, scene: "forty" },
+  { t0: 49.37, t1: 54.75, ch: 2, cap: "被写进答案的机会增加",   src: SRC.paper, scene: "forty" },
+
+  { t0: 54.75, t1: 56.95, ch: 3, cap: "更关键的是谁受益",       src: SRC.table, scene: "who" },
+  { t0: 56.95, t1: 59.96, ch: 3, cap: "排在第五的来源",         src: SRC.table, scene: "who" },
+  { t0: 59.96, t1: 63.26, ch: 3, cap: "相对提高了115%",         src: SRC.table, scene: "who" },
+  { t0: 63.26, t1: 66.27, ch: 3, cap: "已经第一的网站",         src: SRC.table, scene: "who" },
+  { t0: 66.27, t1: 68.68, ch: 3, cap: "甚至可能下降三成",       src: SRC.table, scene: "who" },
+  { t0: 68.68, t1: 73.31, ch: 3, cap: "小站点很难翻身",         src: SRC.table, scene: "trad" },
+  { t0: 73.31, t1: 79.08, ch: 3, cap: "能不能被写进答案",       src: SRC.table, scene: "trad" },
+
+  { t0: 79.08, t1: 81.58, ch: 4, cap: "方法还得按行下药",       src: SRC.domain, scene: "fit" },
+  { t0: 81.58, t1: 84.47, ch: 4, cap: "观点题更吃数据",         src: SRC.domain, scene: "fit" },
+  { t0: 84.47, t1: 86.39, ch: 4, cap: "事实题更吃出处",         src: SRC.domain, scene: "fit" },
+  { t0: 86.39, t1: 88.90, ch: 4, cap: "人物与历史更吃引语",     src: SRC.domain, scene: "fit" },
+  { t0: 88.90, t1: 93.20, ch: 4, cap: "会用错力气",             src: SRC.domain, scene: "fit" },
+
+  { t0: 93.20, t1: 96.30, ch: 5, cap: "从给列表，变成给答案",   src: SRC.end, scene: "end" },
+  { t0: 96.30, t1: 98.51, ch: 5, cap: "把能被引用的内容写清楚", src: SRC.end, scene: "end" },
+  { t0: 98.51, t1: 102.70,ch: 5, cap: "比把关键词堆满更值钱",   src: SRC.end, scene: "end" },
+];
+
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function lerp(a,b,t){return a+(b-a)*t}
+function ease(t){t=clamp(t,0,1);return t*t*(3-2*t)}
+function ramp(t,a,b){if(b<=a)return t>=b?1:0;return ease((t-a)/(b-a))}
+function hold(t,inS,outS,fade){
+  fade=fade==null?0.40:fade;
+  return ramp(t,inS,inS+fade)*(1-ramp(t,outS-fade,outS));
+}
+function yOff(p,px){return (1-p)*px}
+
+/* ---- build static bits ---- */
+(function buildDecor(){
+  const d=document.getElementById("decor");
+  const blobs=[
+    [860,90,220,220],[940,220,160,160],
+    [-40,980,200,200],[40,1200,140,140],
+    [900,1080,240,200],[980,1500,180,180],
+    [-30,1600,200,160],
+  ];
+  blobs.forEach(([x,y,w,h])=>{
+    const s=document.createElement("div");
+    s.className="blob";s.style.left=x+"px";s.style.top=y+"px";s.style.width=w+"px";s.style.height=h+"px";
+    d.appendChild(s);
+  });
+  const pips=[
+    [980,210],[1000,240],[960,260],[1020,280],[990,310],
+    [70,1180],[50,1210],[90,1230],[40,1260],
+    [980,1280],[1000,1310],[960,1340],[1020,1370],
+    [60,1680],[90,1710],[40,1740],
+  ];
+  pips.forEach((p,i)=>{
+    const s=document.createElement("div");
+    s.className="pip"+(i%3===0?" s":"");
+    s.style.left=p[0]+"px";s.style.top=p[1]+"px";
+    d.appendChild(s);
+  });
+})();
+
+(function buildLinks(){
+  const wrap=document.getElementById("link-rows");
+  const widths=[
+    [78,54],[70,48],[84,60],[66,44],[76,58],
+    [80,50],[68,46],[74,56],[82,52],[72,42],
+  ];
+  widths.forEach((w,i)=>{
+    const row=document.createElement("div");
+    row.className="link-row";
+    row.id="link-"+i;
+    row.style.top=(36+i*72)+"px";
+    row.innerHTML=`<div class="idx">${String(i+1).padStart(2,"0")}</div><div class="bars"><div class="lt" style="width:${w[0]}%"></div><div class="ls" style="width:${w[1]}%"></div></div>`;
+    wrap.appendChild(row);
+  });
+})();
+
+(function buildDots(){
+  const wrap=document.getElementById("dots-10k");
+  const cols=14, rows=10;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const d=document.createElement("div");
+      d.className="d";
+      const jitter=((r*13+c*7)%9)-4;
+      const size=8+((r*5+c*3)%7);
+      d.style.width=size+"px";d.style.height=size+"px";
+      d.style.left=((c+0.5)/cols*100)+"%";
+      d.style.top=((r+0.5)/rows*100)+"%";
+      d.style.marginLeft=(-size/2+jitter)+"px";
+      d.style.marginTop=(-size/2)+"px";
+      d.dataset.i=String(r*cols+c);
+      wrap.appendChild(d);
+    }
+  }
+})();
+
+const els={
+  nav: document.getElementById("nav"),
+  progress: document.getElementById("progress"),
+  navItems: [...document.querySelectorAll("#nav-items span")],
+  chap: document.getElementById("chap-title"),
+  source: document.getElementById("source"),
+  capA: document.getElementById("cap-a"),
+  capB: document.getElementById("cap-b"),
+  scenes: {
+    links: document.getElementById("scene-links"),
+    cite: document.getElementById("scene-cite"),
+    geo: document.getElementById("scene-geo"),
+    tenk: document.getElementById("scene-10k"),
+    zero: document.getElementById("scene-zero"),
+    three: document.getElementById("scene-three"),
+    forty: document.getElementById("scene-40"),
+    who: document.getElementById("scene-who"),
+    trad: document.getElementById("scene-trad"),
+    fit: document.getElementById("scene-fit"),
+    end: document.getElementById("scene-end"),
+  },
+  links: [...Array(10)].map((_,i)=>document.getElementById("link-"+i)),
+  answer: document.getElementById("answer-card"),
+  tenTitle: document.getElementById("ten-title"),
+  eqLine: document.getElementById("eq-line"),
+  citeLines: [...document.querySelectorAll("#cite-lines .cl")],
+  citeTag: document.querySelector("#scene-cite .tag"),
+  geoWord: document.querySelector("#scene-geo .geo"),
+  geoSub: document.querySelector("#scene-geo .sub"),
+  dots: [...document.querySelectorAll("#dots-10k .d")],
+  num10k: document.getElementById("num-10k"),
+  unit10k: document.querySelector("#scene-10k .unit"),
+  cardKw: document.getElementById("card-kw"),
+  cardAuth: document.getElementById("card-auth"),
+  barKw: document.getElementById("bar-kw"),
+  barAuth: document.getElementById("bar-auth"),
+  meths: [0,1,2].map(i=>document.getElementById("meth-"+i)),
+  threeLead: document.getElementById("three-lead"),
+  stat40: document.getElementById("stat-40"),
+  range40: document.querySelector("#scene-40 .range"),
+  b40: [0,1,2].map(i=>document.getElementById("b40-"+i)),
+  who5: document.getElementById("who-5"),
+  who1: document.getElementById("who-1"),
+  who5bar: document.getElementById("who-5-bar"),
+  who1bar: document.getElementById("who-1-bar"),
+  who5num: document.getElementById("who-5-num"),
+  who1num: document.getElementById("who-1-num"),
+  trad0: document.getElementById("trad-0"),
+  trad1: document.getElementById("trad-1"),
+  fits: [0,1,2].map(i=>document.getElementById("fit-"+i)),
+  fitWarn: document.getElementById("fit-warn"),
+  endRule: document.getElementById("end-rule"),
+  endTitle: document.getElementById("end-title"),
+  endFoot: document.getElementById("end-foot"),
+};
+
+let capFront = "a";
+let lastCap = null;
+function setCaption(text, t, cue){
+  const fade=0.22;
+  const p = ramp(t, cue.t0, cue.t0+fade);
+  if(text !== lastCap){
+    lastCap = text;
+    const back = capFront==="a" ? els.capB : els.capA;
+    const front = capFront==="a" ? els.capA : els.capB;
+    back.textContent = text;
+    capFront = capFront==="a" ? "b" : "a";
+  }
+  const frontEl = capFront==="a" ? els.capA : els.capB;
+  const backEl  = capFront==="a" ? els.capB : els.capA;
+  frontEl.style.opacity = String(text ? p : 0);
+  frontEl.style.transform = `translateY(${yOff(p,12)}px)`;
+  backEl.style.opacity = "0";
+}
+
+function setSource(text, t, cue){
+  els.source.textContent = text;
+  const a = text ? ramp(t, Math.max(cue.t0, 0.8), Math.max(cue.t0,0.8)+0.4) : 0;
+  els.source.style.opacity = String(a);
+  els.source.style.transform = `translateY(${yOff(a,8)}px)`;
+}
+
+function currentChapter(t){
+  let i=0;
+  for(let k=0;k<CHAPTERS.length;k++) if(t>=CHAPTERS[k].t) i=k;
+  return i;
+}
+
+function updateNav(t){
+  const navA = ramp(t, 0.15, 0.7);
+  els.nav.style.opacity = String(navA);
+  const ch = currentChapter(t);
+  els.navItems.forEach((el,i)=>el.classList.toggle("on", i===ch));
+  // progress grows to the right edge of current label
+  const items = els.navItems;
+  const navLeft = els.nav.getBoundingClientRect().left;
+  const cur = items[ch].getBoundingClientRect();
+  const target = cur.right - navLeft;
+  // ease between chapters
+  const t0 = CHAPTERS[ch].t;
+  const t1 = CHAPTERS[ch+1] ? CHAPTERS[ch+1].t : DURATION;
+  const prev = ch===0 ? 28 : (items[ch-1].getBoundingClientRect().right - navLeft);
+  const startW = ch===0 ? 0 : prev;
+  const p = ramp(t, t0, Math.min(t0+0.7, t0+(t1-t0)*0.25));
+  const w = lerp(startW, target, p);
+  els.progress.style.width = w+"px";
+
+  const title = CHAPTERS[ch].title;
+  els.chap.textContent = title;
+  const ta = title ? ramp(t, t0, t0+0.35)*navA : 0;
+  els.chap.style.opacity = String(ta);
+  els.chap.style.transform = `translateY(${yOff(ta,8)}px)`;
+}
+
+function setScene(name, a){
+  const el = els.scenes[name];
+  if(!el) return;
+  el.style.opacity = String(clamp(a,0,1));
+}
+
+function animateLinks(t){
+  const a = hold(t, 0.0, 15.63, 0.45);
+  setScene("links", a);
+  // rows cascade in
+  els.links.forEach((row,i)=>{
+    const tin = 0.50 + i*0.13;
+    const appear = ramp(t, tin, tin+0.35);
+    // collapse toward center after 5.01
+    const col = ramp(t, 5.01, 7.20);
+    const cy = 36+i*72;
+    const mid = 340;
+    const y = lerp(cy, mid, col);
+    const sc = lerp(1, 0.12, col);
+    const op = appear * (1-col);
+    row.style.opacity = String(op);
+    row.style.transform = `translateY(${y-cy}px) scale(${sc})`;
+    row.style.transformOrigin = "left center";
+  });
+  const ans = ramp(t, 5.40, 7.20) * (1-ramp(t, 9.40, 10.00));
+  els.answer.style.opacity = String(ans);
+  els.answer.style.transform = `translateY(${yOff(ans,24)}px) scale(${lerp(0.96,1,ans)})`;
+  const tit = ramp(t, 9.55, 10.30) * (1-ramp(t, 15.20, 15.63));
+  els.tenTitle.style.opacity = String(tit);
+  els.tenTitle.style.transform = `translateY(${yOff(tit,18)}px)`;
+  const eq = ramp(t, 11.78, 12.50) * (1-ramp(t, 15.20, 15.63));
+  els.eqLine.style.opacity = String(eq);
+  els.eqLine.style.transform = `translateY(${yOff(eq,12)}px)`;
+}
+
+function animateCite(t){
+  const a = hold(t, 15.63, 18.32, 0.40);
+  setScene("cite", a);
+  els.citeTag.style.opacity = String(ramp(t, 15.63, 16.05));
+  els.citeTag.style.transform = `translateY(${yOff(ramp(t,15.63,16.05),10)}px)`;
+  els.citeLines.forEach((ln,i)=>{
+    const p = ramp(t, 15.85+i*0.18, 16.20+i*0.18);
+    ln.style.transform = `scaleX(${p})`;
+  });
+}
+
+function animateGeo(t){
+  const a = hold(t, 18.32, 23.13, 0.40);
+  setScene("geo", a);
+  const p = ramp(t, 18.32, 19.05);
+  els.geoWord.style.opacity = String(p);
+  els.geoWord.style.transform = `translateY(${yOff(p,20)}px)`;
+  const s = ramp(t, 18.90, 19.55);
+  els.geoSub.style.opacity = String(s);
+  els.geoSub.style.transform = `translateY(${yOff(s,12)}px)`;
+}
+
+function animateTenk(t){
+  const a = hold(t, 23.13, 26.89, 0.40);
+  setScene("tenk", a);
+  els.dots.forEach((d,i)=>{
+    const p = ramp(t, 23.20+i*0.008, 23.45+i*0.008);
+    d.style.opacity = String(p*0.55);
+    d.style.transform = `scale(${p})`;
+  });
+  const n = ramp(t, 23.50, 24.20);
+  els.num10k.style.opacity = String(n);
+  els.num10k.style.transform = `translateY(${yOff(n,16)}px)`;
+  const u = ramp(t, 23.90, 24.50);
+  els.unit10k.style.opacity = String(u);
+}
+
+function animateZero(t){
+  const a = hold(t, 26.89, 35.84, 0.40);
+  setScene("zero", a);
+  const k = ramp(t, 26.95, 27.55);
+  els.cardKw.style.opacity = String(k);
+  els.cardKw.style.transform = `translateY(${yOff(k,18)}px)`;
+  els.barKw.style.width = (ramp(t, 27.30, 28.20)*6)+"%";
+  const auIn = ramp(t, 31.21, 31.85);
+  // second card visible earlier but muted, then emphasized
+  const auEarly = ramp(t, 27.40, 28.00);
+  els.cardAuth.style.opacity = String(Math.max(auEarly*0.55, auIn));
+  els.cardAuth.style.transform = `translateY(${yOff(auEarly,18)}px)`;
+  els.barAuth.style.width = (ramp(t, 31.50, 32.40)*5)+"%";
+  els.cardKw.style.filter = t>=31.21 ? "saturate(0.7)" : "none";
+}
+
+function animateThree(t){
+  const a = hold(t, 35.84, 43.40, 0.40);
+  setScene("three", a);
+  const ld = ramp(t, 35.84, 36.45);
+  els.threeLead.style.opacity = String(ld);
+  els.threeLead.style.transform = `translateY(${yOff(ld,12)}px)`;
+  const times=[38.39,40.05,41.52];
+  els.meths.forEach((m,i)=>{
+    const tin = t<38.39 ? 36.10+i*0.15 : times[i];
+    // before 38.39 show faintly together, then pop in sequence
+    const early = ramp(t, 36.20+i*0.12, 36.70+i*0.12)*0.35;
+    const full = ramp(t, times[i], times[i]+0.40);
+    const p = Math.max(early, full);
+    m.style.opacity = String(p);
+    m.style.transform = `translateY(${yOff(Math.max(ramp(t,36.20+i*0.12,36.70+i*0.12), full),16)}px)`;
+  });
+}
+
+function animateForty(t){
+  const a = hold(t, 43.40, 54.75, 0.40);
+  setScene("forty", a);
+  const p = ramp(t, 43.40, 44.20);
+  els.stat40.style.opacity = String(p);
+  els.stat40.style.transform = `translateY(${yOff(p,18)}px)`;
+  // emphasize at 46.73
+  const boom = 1 + ramp(t, 46.73, 47.40)*0.04;
+  els.stat40.style.transform = `translateY(${yOff(p,18)}px) scale(${t>=46.73?boom:1})`;
+  const r = ramp(t, 43.80, 44.50);
+  els.range40.style.opacity = String(r);
+  const hs=[0.82, 0.90, 1.0];
+  els.b40.forEach((b,i)=>{
+    const g = ramp(t, 44.10+i*0.18, 45.10+i*0.18);
+    b.style.height = (g*hs[i]*200)+"px";
+  });
+}
+
+function animateWho(t){
+  const a = hold(t, 54.75, 68.68, 0.40);
+  setScene("who", a);
+  // columns fade; #5 first, then number, then #1
+  const c5 = ramp(t, 55.00, 55.70);
+  const c1 = ramp(t, 63.26, 63.95);
+  els.who5.style.opacity = String(c5);
+  els.who5.style.transform = `translateX(${(1-c1)*230}px)`;
+  const h5 = ramp(t, 59.96, 61.40);
+  const px5 = 16 + h5*400;
+  const face5 = els.who5bar.querySelector(".face");
+  const side5 = els.who5bar.querySelector(".side");
+  const lid5 = els.who5bar.querySelector(".lid");
+  face5.style.height = px5+"px";
+  side5.style.height = px5+"px";
+  lid5.style.top = "-16px";
+  els.who5num.textContent = "+" + Math.round(lerp(0,115,h5)) + "%";
+  els.who5num.style.opacity = String(Math.max(ramp(t,56.95,57.50)*0.35, ramp(t,59.96,60.40)));
+  els.who1.style.opacity = String(c1);
+  const h1 = ramp(t, 66.27, 67.40);
+  const px1 = 16 + h1*110;
+  const face1 = els.who1bar.querySelector(".face");
+  const side1 = els.who1bar.querySelector(".side");
+  face1.style.height = px1+"px";
+  side1.style.height = px1+"px";
+  els.who1num.textContent = "−" + Math.round(lerp(0,30,h1)) + "%";
+  els.who1num.style.opacity = String(Math.max(c1*0.35, ramp(t,66.27,66.80)));
+}
+
+function animateTrad(t){
+  const a = hold(t, 68.68, 79.08, 0.40);
+  setScene("trad", a);
+  const r0 = ramp(t, 68.80, 69.50);
+  els.trad0.style.opacity = String(r0);
+  els.trad0.style.transform = `translateY(${yOff(r0,12)}px)`;
+  const r1 = ramp(t, 73.31, 74.00);
+  els.trad1.style.opacity = String(r1);
+  els.trad1.style.transform = `translateY(${yOff(r1,12)}px)`;
+}
+
+function animateFit(t){
+  const a = hold(t, 79.08, 93.20, 0.40);
+  setScene("fit", a);
+  const ts=[81.58,84.47,86.39];
+  els.fits.forEach((row,i)=>{
+    const early = ramp(t, 79.20+i*0.12, 79.70+i*0.12)*0.25;
+    const full = ramp(t, ts[i], ts[i]+0.40);
+    const p = Math.max(early, full);
+    row.style.opacity = String(p);
+    row.style.transform = `translateY(${yOff(full||early,10)}px)`;
+  });
+  const w = ramp(t, 88.90, 89.60);
+  els.fitWarn.style.opacity = String(w);
+  els.fitWarn.style.transform = `translateY(${yOff(w,12)}px)`;
+}
+
+function animateEnd(t){
+  const a = hold(t, 93.20, 102.80, 0.0) * ramp(t, 93.20, 93.70);
+  // stay visible till end; fade only if needed
+  setScene("end", t>=93.20 ? ramp(t,93.20,93.70) : 0);
+  els.endRule.style.transform = `scaleX(${ramp(t,93.30,93.90)})`;
+  const p = ramp(t, 93.40, 94.20);
+  els.endTitle.style.opacity = String(p);
+  els.endTitle.style.transform = `translateY(${yOff(p,16)}px)`;
+  const f = ramp(t, 96.40, 97.10);
+  els.endFoot.style.opacity = String(f);
+}
+
+function cueAt(t){
+  let c=CUES[0];
+  for(const x of CUES) if(t>=x.t0) c=x;
+  return c;
+}
+
+window.seek = function seek(t){
+  t = clamp(t, 0, DURATION+0.05);
+  const cue = cueAt(t);
+  updateNav(t);
+  setCaption(cue.cap, t, cue);
+  setSource(cue.src, t, cue);
+  animateLinks(t);
+  animateCite(t);
+  animateGeo(t);
+  animateTenk(t);
+  animateZero(t);
+  animateThree(t);
+  animateForty(t);
+  animateWho(t);
+  animateTrad(t);
+  animateFit(t);
+  animateEnd(t);
+  return cue.scene;
+};
+window.DURATION = DURATION;
+
+const params = new URLSearchParams(location.search);
+if (params.has("play")) {
+  const t0 = performance.now();
+  const start = parseFloat(params.get("t") || "0");
+  function loop(now){
+    const t = start + (now-t0)/1000;
+    if(t<=DURATION){ seek(t); requestAnimationFrame(loop); }
+    else seek(DURATION);
+  }
+  requestAnimationFrame(loop);
+} else if (params.has("t")) {
+  seek(parseFloat(params.get("t")));
+} else {
+  seek(0);
+}
+</script>
+</body>
+</html>

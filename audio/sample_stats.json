@@ -1,0 +1,80 @@
+[
+  {
+    "n": 376,
+    "median": 130.08130081300814,
+    "mean": 129.78962837965562,
+    "p25": 103.8961038961039,
+    "p75": 150.9433962264151,
+    "voiced_rms_med": 0.056195881217718124,
+    "duration": 13.536,
+    "voice": "zh-CN-YunyangNeural",
+    "rate": "-8%",
+    "pitch": "+0Hz",
+    "tag": "YunyangNeural_-8p_p0Hz"
+  },
+  {
+    "n": 397,
+    "median": 131.14754098360655,
+    "mean": 130.78181919149435,
+    "p25": 103.8961038961039,
+    "p75": 150.9433962264151,
+    "voiced_rms_med": 0.055314693599939346,
+    "duration": 14.136,
+    "voice": "zh-CN-YunyangNeural",
+    "rate": "-12%",
+    "pitch": "+0Hz",
+    "tag": "YunyangNeural_-12p_p0Hz"
+  },
+  {
+    "n": 550,
+    "median": 164.94845360824743,
+    "mean": 169.83474995287364,
+    "p25": 140.35087719298247,
+    "p75": 200.0,
+    "voiced_rms_med": 0.07020387426018715,
+    "duration": 14.928,
+    "voice": "zh-CN-YunxiNeural",
+    "rate": "-10%",
+    "pitch": "+0Hz",
+    "tag": "YunxiNeural_-10p_p0Hz"
+  },
+  {
+    "n": 549,
+    "median": 163.26530612244898,
+    "mean": 166.6863005969582,
+    "p25": 137.93103448275863,
+    "p75": 197.53086419753086,
+    "voiced_rms_med": 0.0699940025806427,
+    "duration": 14.928,
+    "voice": "zh-CN-YunxiNeural",
+    "rate": "-10%",
+    "pitch": "-3Hz",
+    "tag": "YunxiNeural_-10p_-3Hz"
+  },
+  {
+    "n": 555,
+    "median": 116.78832116788321,
+    "mean": 126.91637922821143,
+    "p25": 100.0,
+    "p75": 142.85714285714286,
+    "voiced_rms_med": 0.07666826248168945,
+    "duration": 15.192,
+    "voice": "zh-CN-YunjianNeural",
+    "rate": "-10%",
+    "pitch": "+0Hz",
+    "tag": "YunjianNeural_-10p_p0Hz"
+  },
+  {
+    "n": 540,
+    "median": 115.94202898550725,
+    "mean": 124.50186060248399,
+    "p25": 99.37888198757764,
+    "p75": 140.35087719298247,
+    "voiced_rms_med": 0.07920848950743675,
+    "duration": 14.88,
+    "voice": "zh-CN-YunjianNeural",
+    "rate": "-8%",
+    "pitch": "-2Hz",
+    "tag": "YunjianNeural_-8p_-2Hz"
+  }
+]
